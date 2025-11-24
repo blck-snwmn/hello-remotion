@@ -43,8 +43,8 @@ const TimelineComposition: React.FC<typeof defaultProps> = (props) => {
     const framesPerMinute = (props.videoSettings.secPerHour * fps) / 60;
     const lastTaskAppearFrame = minuteDiff * framesPerMinute;
 
-    // Add 120 frames (4 seconds) for progress bar + 60 frames (2 seconds) buffer
-    const timelineDuration = Math.ceil(lastTaskAppearFrame + 180);
+    // 120 frames for last task progress + 90 frames for "終わり" progress
+    const timelineDuration = Math.ceil(lastTaskAppearFrame + 210);
 
     return (
         <>
@@ -82,12 +82,11 @@ export const RemotionRoot: React.FC = () => {
         const framesPerMinute = (props.videoSettings.secPerHour * fps) / 60;
         const lastTaskAppearFrame = minuteDiff * framesPerMinute;
 
-        // Add 120 frames (4 seconds) for progress bar + 60 frames (2 seconds) buffer
-        const timelineDuration = Math.ceil(lastTaskAppearFrame + 180);
+        // 120 frames for last task progress + 90 frames for "終わり" progress
+        const timelineDuration = Math.ceil(lastTaskAppearFrame + 210);
 
         return titleDuration + timelineDuration + endingDuration;
     };
-
     return (
         <>
             <Composition
