@@ -39,10 +39,12 @@ const TimelineComposition: React.FC<typeof defaultProps> = (props) => {
     }
 
     const lastTime = parseTime(lastTask.time);
-    const endTime = lastTime + 60;
-    const totalMinutes = endTime - startTime;
+    const minuteDiff = lastTime - startTime;
     const framesPerMinute = (props.videoSettings.secPerHour * fps) / 60;
-    const timelineDuration = Math.ceil(totalMinutes * framesPerMinute);
+    const lastTaskAppearFrame = minuteDiff * framesPerMinute;
+
+    // Add 120 frames (4 seconds) for progress bar + 60 frames (2 seconds) buffer
+    const timelineDuration = Math.ceil(lastTaskAppearFrame + 180);
 
     return (
         <>
@@ -76,10 +78,12 @@ export const RemotionRoot: React.FC = () => {
         if (!lastTask) return titleDuration + 30 * fps + endingDuration;
 
         const lastTime = parseTime(lastTask.time);
-        const endTime = lastTime + 60;
-        const totalMinutes = endTime - startTime;
+        const minuteDiff = lastTime - startTime;
         const framesPerMinute = (props.videoSettings.secPerHour * fps) / 60;
-        const timelineDuration = Math.ceil(totalMinutes * framesPerMinute);
+        const lastTaskAppearFrame = minuteDiff * framesPerMinute;
+
+        // Add 120 frames (4 seconds) for progress bar + 60 frames (2 seconds) buffer
+        const timelineDuration = Math.ceil(lastTaskAppearFrame + 180);
 
         return titleDuration + timelineDuration + endingDuration;
     };

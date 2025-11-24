@@ -46,6 +46,12 @@ export const Timeline: React.FC<TimelineProps> = ({
 		const minuteDiff = taskTime - startTime;
 		const appearFrame = minuteDiff * framesPerMinute;
 
+		// Calculate next task's appear frame for progress animation
+		const nextTask = tasks[index + 1];
+		const nextAppearFrame = nextTask
+			? parseTime(nextTask.time) * framesPerMinute - startTime * framesPerMinute
+			: appearFrame + 120; // If last task, show progress for 4 seconds (120 frames at 30fps)
+
 		const opacity = interpolate(
 			frame - appearFrame,
 			[0, 10],
@@ -57,6 +63,14 @@ export const Timeline: React.FC<TimelineProps> = ({
 			frame - appearFrame,
 			[0, 10],
 			[-20, 0],
+			{ extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
+		);
+
+		// Progress from 0% to 100% between current and next task appearance
+		const progress = interpolate(
+			frame,
+			[appearFrame, nextAppearFrame],
+			[0, 100],
 			{ extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
 		);
 
@@ -85,7 +99,7 @@ export const Timeline: React.FC<TimelineProps> = ({
 				<div
 					style={{
 						padding: useMultiColumn ? '8px 16px' : '10px 20px',
-						backgroundColor: '#e0f7fa',
+						background: `linear-gradient(to right, #80deea 0%, #80deea ${progress}%, #e0f7fa ${progress}%, #e0f7fa 100%)`,
 						borderRadius: 10,
 						boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
 					}}
