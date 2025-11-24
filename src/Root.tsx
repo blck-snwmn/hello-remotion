@@ -1,6 +1,8 @@
 import React from 'react';
-import { Composition } from 'remotion';
+import { Composition, Sequence } from 'remotion';
 import { Timeline } from './Timeline';
+import { TitleScreen } from './TitleScreen';
+import { EndingScreen } from './EndingScreen';
 
 const defaultProps = {
     date: '2024-11-25',
@@ -24,33 +26,69 @@ const parseTime = (timeStr: string): number => {
     return hours * 60 + minutes;
 };
 
+// Wrapper component to combine title, timeline, and ending
+const TimelineComposition: React.FC<typeof defaultProps> = (props) => {
+    const fps = 30;
+    const titleDuration = 60; // 2 seconds
+    const endingDuration = 60; // 2 seconds
+
+    const startTime = parseTime(props.videoSettings.startHour);
+    const lastTask = props.tasks[props.tasks.length - 1];
+    if (!lastTask) {
+        return null;
+    }
+
+    const lastTime = parseTime(lastTask.time);
+    const endTime = lastTime + 60;
+    const totalMinutes = endTime - startTime;
+    const framesPerMinute = (props.videoSettings.secPerHour * fps) / 60;
+    const timelineDuration = Math.ceil(totalMinutes * framesPerMinute);
+
+    return (
+        <>
+            <Sequence from={0} durationInFrames={titleDuration}>
+                <TitleScreen date={props.date} />
+            </Sequence>
+            <Sequence
+                from={titleDuration}
+                durationInFrames={timelineDuration}
+            >
+                <Timeline {...props} />
+            </Sequence>
+            <Sequence
+                from={titleDuration + timelineDuration}
+                durationInFrames={endingDuration}
+            >
+                <EndingScreen date={props.date} />
+            </Sequence>
+        </>
+    );
+};
+
 export const RemotionRoot: React.FC = () => {
     const fps = 30;
-
-    // Calculate duration based on defaultProps for preview
-    // In CLI, we might override this, but Composition duration is static in the definition usually?
-    // Actually, calculateMetadata can be used to set duration dynamically based on props.
+    const titleDuration = 60;
+    const endingDuration = 60;
 
     const calculateDuration = (props: typeof defaultProps) => {
         const startTime = parseTime(props.videoSettings.startHour);
         const lastTask = props.tasks[props.tasks.length - 1];
-        if (!lastTask) return 30 * fps; // Default duration if no tasks
+        if (!lastTask) return titleDuration + 30 * fps + endingDuration;
 
         const lastTime = parseTime(lastTask.time);
-
-        // Add 1 hour buffer after last task
         const endTime = lastTime + 60;
         const totalMinutes = endTime - startTime;
-
         const framesPerMinute = (props.videoSettings.secPerHour * fps) / 60;
-        return Math.ceil(totalMinutes * framesPerMinute);
+        const timelineDuration = Math.ceil(totalMinutes * framesPerMinute);
+
+        return titleDuration + timelineDuration + endingDuration;
     };
 
     return (
         <>
             <Composition
                 id="Timeline"
-                component={Timeline}
+                component={TimelineComposition}
                 durationInFrames={calculateDuration(defaultProps)}
                 fps={fps}
                 width={1920}
