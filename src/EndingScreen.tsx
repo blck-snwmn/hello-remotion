@@ -1,5 +1,6 @@
 import React from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
+import { fontFamily } from './fonts';
 
 interface EndingScreenProps {
     date: string;
@@ -21,6 +22,7 @@ export const EndingScreen: React.FC<EndingScreenProps> = ({ date }) => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 opacity,
+                fontFamily,
             }}
         >
             <h1

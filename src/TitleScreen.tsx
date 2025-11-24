@@ -1,5 +1,6 @@
 import React from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from 'remotion';
+import { fontFamily } from './fonts';
 
 interface TitleScreenProps {
     date: string;
@@ -22,6 +23,7 @@ export const TitleScreen: React.FC<TitleScreenProps> = ({ date }) => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 opacity,
+                fontFamily,
             }}
         >
             <h1

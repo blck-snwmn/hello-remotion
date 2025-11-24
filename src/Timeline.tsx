@@ -1,5 +1,6 @@
 import React from 'react';
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
+import { fontFamily } from './fonts';
 
 interface Task {
 	time: string;
@@ -96,7 +97,11 @@ export const Timeline: React.FC<TimelineProps> = ({
 	};
 
 	return (
-		<AbsoluteFill style={{ backgroundColor: 'white', padding: 40 }}>
+		<AbsoluteFill style={{
+			backgroundColor: 'white',
+			padding: 40,
+			fontFamily
+		}}>
 			<h1 style={{ fontSize: 60, marginBottom: 40 }}>{date}</h1>
 			{useMultiColumn ? (
 				<div
