@@ -1,109 +1,122 @@
-import React from 'react';
-import { Composition, Sequence } from 'remotion';
-import { Timeline } from './Timeline';
-import { TitleScreen } from './TitleScreen';
-import { EndingScreen } from './EndingScreen';
+import React from "react";
+import { Composition, Folder } from "remotion";
 
-const defaultProps = {
-    date: '2024-11-25',
-    videoSettings: {
-        startHour: '09:00',
-        secPerHour: 2,
-    },
-    tasks: [
-        { time: '09:30', label: '朝会 (Morning MTG)' },
-        { time: '11:00', label: 'コードレビュー' },
-        { time: '12:00', label: 'ランチ' },
-        { time: '14:00', label: '集中開発タイム' },
-        { time: '17:30', label: '日報作成' },
-    ],
-};
+// Compositions
+import { BasicAnimation } from "./compositions/01-BasicAnimation";
+import { TextAnimations } from "./compositions/02-TextAnimations";
+import { Transitions } from "./compositions/03-Transitions";
+import { MediaEmbed } from "./compositions/04-MediaEmbed";
+import { AudioDemo } from "./compositions/05-Audio";
+import { Charts } from "./compositions/06-Charts";
+import { Showcase } from "./compositions/07-Showcase";
 
-const parseTime = (timeStr: string): number => {
-    const parts = timeStr.split(':').map(Number);
-    const hours = parts[0] ?? 0;
-    const minutes = parts[1] ?? 0;
-    return hours * 60 + minutes;
-};
-
-// Wrapper component to combine title, timeline, and ending
-const TimelineComposition: React.FC<typeof defaultProps> = (props) => {
-    const fps = 30;
-    const titleDuration = 60; // 2 seconds
-    const endingDuration = 60; // 2 seconds
-
-    const startTime = parseTime(props.videoSettings.startHour);
-    const lastTask = props.tasks[props.tasks.length - 1];
-    if (!lastTask) {
-        return null;
-    }
-
-    const lastTime = parseTime(lastTask.time);
-    const minuteDiff = lastTime - startTime;
-    const framesPerMinute = (props.videoSettings.secPerHour * fps) / 60;
-    const lastTaskAppearFrame = minuteDiff * framesPerMinute;
-
-    // 120 frames for last task progress + 90 frames for "終わり" progress
-    const timelineDuration = Math.ceil(lastTaskAppearFrame + 210);
-
-    return (
-        <>
-            <Sequence from={0} durationInFrames={titleDuration}>
-                <TitleScreen date={props.date} />
-            </Sequence>
-            <Sequence
-                from={titleDuration}
-                durationInFrames={timelineDuration}
-            >
-                <Timeline {...props} />
-            </Sequence>
-            <Sequence
-                from={titleDuration + timelineDuration}
-                durationInFrames={endingDuration}
-            >
-                <EndingScreen date={props.date} />
-            </Sequence>
-        </>
-    );
-};
-
+/**
+ * Remotion サンプル集
+ *
+ * 各Compositionで1つのテクニックを学べる構成
+ */
 export const RemotionRoot: React.FC = () => {
-    const fps = 30;
-    const titleDuration = 60;
-    const endingDuration = 60;
+	const fps = 30;
 
-    const calculateDuration = (props: typeof defaultProps) => {
-        const startTime = parseTime(props.videoSettings.startHour);
-        const lastTask = props.tasks[props.tasks.length - 1];
-        if (!lastTask) return titleDuration + 30 * fps + endingDuration;
+	return (
+		<>
+			<Folder name="Samples">
+				{/* 01: 基本アニメーション */}
+				<Composition
+					id="01-BasicAnimation"
+					component={BasicAnimation}
+					durationInFrames={6 * fps} // 6秒
+					fps={fps}
+					width={1920}
+					height={1080}
+				/>
 
-        const lastTime = parseTime(lastTask.time);
-        const minuteDiff = lastTime - startTime;
-        const framesPerMinute = (props.videoSettings.secPerHour * fps) / 60;
-        const lastTaskAppearFrame = minuteDiff * framesPerMinute;
+				{/* 02: テキストアニメーション */}
+				<Composition
+					id="02-TextAnimations"
+					component={TextAnimations}
+					durationInFrames={6 * fps} // 6秒
+					fps={fps}
+					width={1920}
+					height={1080}
+				/>
 
-        // 120 frames for last task progress + 90 frames for "終わり" progress
-        const timelineDuration = Math.ceil(lastTaskAppearFrame + 210);
+				{/* 03: トランジション */}
+				<Composition
+					id="03-Transitions"
+					component={Transitions}
+					durationInFrames={calculateTransitionsDuration(fps)}
+					fps={fps}
+					width={1920}
+					height={1080}
+				/>
 
-        return titleDuration + timelineDuration + endingDuration;
-    };
-    return (
-        <>
-            <Composition
-                id="Timeline"
-                component={TimelineComposition}
-                durationInFrames={calculateDuration(defaultProps)}
-                fps={fps}
-                width={1920}
-                height={1080}
-                defaultProps={defaultProps}
-                calculateMetadata={async ({ props }) => {
-                    const durationInFrames = calculateDuration(props);
-                    return {
-                        durationInFrames,
-                    };
-                }}
-            />
-        </>
-    );
+				{/* 04: メディア埋め込み */}
+				<Composition
+					id="04-MediaEmbed"
+					component={MediaEmbed}
+					durationInFrames={10 * fps} // 10秒
+					fps={fps}
+					width={1920}
+					height={1080}
+				/>
+
+				{/* 05: オーディオ */}
+				<Composition
+					id="05-Audio"
+					component={AudioDemo}
+					durationInFrames={8 * fps} // 8秒
+					fps={fps}
+					width={1920}
+					height={1080}
+				/>
+
+				{/* 06: チャート */}
+				<Composition
+					id="06-Charts"
+					component={Charts}
+					durationInFrames={5 * fps} // 5秒
+					fps={fps}
+					width={1920}
+					height={1080}
+				/>
+			</Folder>
+
+			{/* 07: ショーケース（全テクニック組み合わせ） */}
+			<Composition
+				id="07-Showcase"
+				component={Showcase}
+				durationInFrames={calculateShowcaseDuration(fps)}
+				fps={fps}
+				width={1920}
+				height={1080}
+			/>
+		</>
+	);
 };
+
+/**
+ * 03-Transitions の総時間を計算
+ * 7シーン × 60フレーム - 6トランジション × 15フレーム
+ */
+function calculateTransitionsDuration(fps: number): number {
+	const sceneDuration = 60;
+	const transitionDuration = 15;
+	const sceneCount = 7;
+	const transitionCount = 6;
+
+	return sceneDuration * sceneCount - transitionDuration * transitionCount;
+}
+
+/**
+ * 07-Showcase の総時間を計算
+ * イントロ(90) + 6つのFeature(120x6) + Stats(150) + エンディング(90) - トランジション(20x8)
+ */
+function calculateShowcaseDuration(fps: number): number {
+	const transitionDuration = 20;
+	const scenes = [90, 120, 120, 120, 120, 120, 120, 150, 90]; // 各シーンのフレーム数
+	const transitionCount = scenes.length - 1;
+
+	const totalSceneFrames = scenes.reduce((sum, d) => sum + d, 0);
+	return totalSceneFrames - transitionDuration * transitionCount;
+}

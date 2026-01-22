@@ -1,35 +1,26 @@
-import { test, expect } from 'bun:test';
-import { bundle } from '@remotion/bundler';
-import { selectComposition } from '@remotion/renderer';
-import path from 'path';
-import fs from 'fs';
+import { test, expect } from "bun:test";
+import { bundle } from "@remotion/bundler";
+import { selectComposition } from "@remotion/renderer";
+import path from "path";
 
-test('bundle and select composition successfully', async () => {
-	// Load sample.json for testing
-	const sampleJsonPath = path.join(process.cwd(), 'sample.json');
-	expect(fs.existsSync(sampleJsonPath)).toBe(true);
-
-	const jsonContent = await Bun.file(sampleJsonPath).text();
-	const inputProps = JSON.parse(jsonContent);
-
+test("bundle and select composition successfully", async () => {
 	// Bundle the video
-	const entryPoint = path.join(process.cwd(), 'src', 'index.ts');
+	const entryPoint = path.join(process.cwd(), "src", "index.ts");
 	const bundleLocation = await bundle({
 		entryPoint,
 	});
 
 	expect(bundleLocation).toBeDefined();
-	expect(typeof bundleLocation).toBe('string');
+	expect(typeof bundleLocation).toBe("string");
 
-	// Select composition
+	// Select composition (01-BasicAnimation)
 	const composition = await selectComposition({
 		serveUrl: bundleLocation,
-		id: 'Timeline',
-		inputProps,
+		id: "01-BasicAnimation",
 	});
 
 	expect(composition).toBeDefined();
-	expect(composition.id).toBe('Timeline');
+	expect(composition.id).toBe("01-BasicAnimation");
 	expect(composition.width).toBe(1920);
 	expect(composition.height).toBe(1080);
 	expect(composition.fps).toBe(30);
