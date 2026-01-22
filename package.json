@@ -3,6 +3,11 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "studio": "remotion studio src/index.ts --browser-executable='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'",
+    "render": "remotion render src/index.ts",
+    "build": "remotion render src/index.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/react": "19.2.8",
@@ -12,12 +17,15 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@remotion/bundler": "^4.0.377",
-    "@remotion/google-fonts": "^4.0.377",
-    "@remotion/renderer": "^4.0.377",
+    "@remotion/bundler": "4.0.409",
+    "@remotion/cli": "^4.0.409",
+    "@remotion/google-fonts": "4.0.409",
+    "@remotion/media": "^4.0.409",
+    "@remotion/renderer": "4.0.409",
+    "@remotion/transitions": "^4.0.409",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "remotion": "^4.0.377",
+    "remotion": "4.0.409",
     "zod": "^4.1.13"
   }
 }
