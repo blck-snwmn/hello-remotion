@@ -17,15 +17,15 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@remotion/bundler": "4.0.468",
-    "@remotion/cli": "4.0.468",
-    "@remotion/google-fonts": "4.0.468",
-    "@remotion/media": "4.0.468",
-    "@remotion/renderer": "4.0.468",
-    "@remotion/transitions": "4.0.468",
+    "@remotion/bundler": "4.0.471",
+    "@remotion/cli": "4.0.471",
+    "@remotion/google-fonts": "4.0.471",
+    "@remotion/media": "4.0.471",
+    "@remotion/renderer": "4.0.471",
+    "@remotion/transitions": "4.0.471",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "remotion": "4.0.468",
+    "remotion": "4.0.471",
     "zod": "^4.1.13"
   }
 }
