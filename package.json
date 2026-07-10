@@ -3,6 +3,7 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "packageManager": "bun@1.3.14",
   "scripts": {
     "studio": "remotion studio src/index.ts --browser-executable='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'",
     "render": "remotion render src/index.ts",
