@@ -18,15 +18,15 @@
     "typescript": "^5 || ^6.0.0 || ^7.0.0"
   },
   "dependencies": {
-    "@remotion/bundler": "4.0.513",
-    "@remotion/cli": "4.0.513",
-    "@remotion/google-fonts": "4.0.513",
-    "@remotion/media": "4.0.513",
-    "@remotion/renderer": "4.0.513",
-    "@remotion/transitions": "4.0.513",
+    "@remotion/bundler": "4.0.514",
+    "@remotion/cli": "4.0.514",
+    "@remotion/google-fonts": "4.0.514",
+    "@remotion/media": "4.0.514",
+    "@remotion/renderer": "4.0.514",
+    "@remotion/transitions": "4.0.514",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "remotion": "4.0.513",
+    "remotion": "4.0.514",
     "zod": "4.4.3"
   }
 }
